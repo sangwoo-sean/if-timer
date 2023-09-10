@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const IfTimerApp());
@@ -14,26 +15,27 @@ class IfTimerApp extends StatefulWidget {
 }
 
 class _TimerAppState extends State<IfTimerApp> {
-  int _timeInSeconds = 0;
-  Timer? _timer;
+  int _timePassed = 0;
+  Timer? _ifTimer;
   bool _isRunning = false;
+  var speed = 1000;
 
   void _startTimer() {
     if (!_isRunning) {
       setState(() {
         _isRunning = true;
       });
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _ifTimer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
         setState(() {
-          _timeInSeconds++;
+          _timePassed = _timePassed + speed;
         });
       });
     }
   }
 
   void _pauseTimer() {
-    if (_timer != null && _isRunning) {
-      _timer!.cancel();
+    if (_ifTimer != null && _isRunning) {
+      _ifTimer!.cancel();
       setState(() {
         _isRunning = false;
       });
@@ -41,37 +43,35 @@ class _TimerAppState extends State<IfTimerApp> {
   }
 
   void _resetTimer() {
-    if (_timer != null) {
-      _timer!.cancel();
+    if (_ifTimer != null) {
+      _ifTimer!.cancel();
       setState(() {
         _isRunning = false;
-        _timeInSeconds = 0;
+        _timePassed = 0;
       });
     }
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _ifTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    int minutes = _timeInSeconds ~/ 60;
-    int seconds = _timeInSeconds % 60;
+    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + _timePassed);
+    String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
 
+    // var time = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('Simple Timer App')),
+        appBar: AppBar(title: const Text('IF Timer')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                style: const TextStyle(fontSize: 48),
-              ),
+              Text(formattedIfNow, style: const TextStyle(fontSize: 36)),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
