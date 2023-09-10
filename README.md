@@ -1,16 +1,16 @@
 # if_timer
 
-A new Flutter project.
+## To Do
 
-## Getting Started
+- [] get time speed input
+- [] start the time with input speed
+- [] display input created time
+- [] get title of the timer
+- [] make list of timer
+- [] add item to the list
+- [] delete item from the list
+- [] update title of item
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Consider
+- DB 없이 앱 내에서 껐다 켜도 저장할 수 있는지?
