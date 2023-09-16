@@ -15,6 +15,27 @@ class IfTimerApp extends StatefulWidget {
 }
 
 class _TimerAppState extends State<IfTimerApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('IF Timer')),
+        body: const Center(
+          child: CreateTimer(),
+        ),
+      ),
+    );
+  }
+}
+
+class CreateTimer extends StatefulWidget {
+  const CreateTimer({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _CreateTimerState();
+}
+
+class _CreateTimerState extends State<CreateTimer> {
   int _timePassed = 0;
   Timer? _ifTimer;
   bool _isRunning = false;
@@ -69,36 +90,29 @@ class _TimerAppState extends State<IfTimerApp> {
         startTime.millisecondsSinceEpoch + _timePassed);
     String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('IF Timer')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(formattedIfNow, style: const TextStyle(fontSize: 24)),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                      onPressed: _startTimer, child: const Text('Start')),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                      onPressed: _pauseTimer, child: const Text('Pause')),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                      onPressed: _resetTimer, child: const Text('Reset')),
-                ],
-              ),
-              const SizedBox(height: 20),
-              CustomTextField(
-                controller: _textController,
-              )
-            ],
-          ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(formattedIfNow, style: const TextStyle(fontSize: 24)),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+                onPressed: _startTimer, child: const Text('Start')),
+            const SizedBox(width: 10),
+            ElevatedButton(
+                onPressed: _pauseTimer, child: const Text('Pause')),
+            const SizedBox(width: 10),
+            ElevatedButton(
+                onPressed: _resetTimer, child: const Text('Reset')),
+          ],
         ),
-      ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: _textController,
+        )
+      ],
     );
   }
 }
