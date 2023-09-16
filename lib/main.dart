@@ -18,16 +18,20 @@ class _TimerAppState extends State<IfTimerApp> {
   int _timePassed = 0;
   Timer? _ifTimer;
   bool _isRunning = false;
-  var speed = 1000;
+  DateTime startTime = DateTime.now();
+  var speed = 1;
+  final TextEditingController _textController = TextEditingController();
 
   void _startTimer() {
-    if (!_isRunning) {
+    if (!_isRunning && _textController.text.isNotEmpty) {
       setState(() {
         _isRunning = true;
+        startTime = DateTime.now();
+        speed = int.parse(_textController.text);
       });
-      _ifTimer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
+      _ifTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
         setState(() {
-          _timePassed = _timePassed + speed;
+          _timePassed = _timePassed + speed * 1000;
         });
       });
     }
@@ -48,6 +52,7 @@ class _TimerAppState extends State<IfTimerApp> {
       setState(() {
         _isRunning = false;
         _timePassed = 0;
+        startTime = DateTime.now();
       });
     }
   }
@@ -60,7 +65,7 @@ class _TimerAppState extends State<IfTimerApp> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + _timePassed);
+    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(startTime.millisecondsSinceEpoch + _timePassed);
     String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
 
     // var time = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
@@ -82,6 +87,11 @@ class _TimerAppState extends State<IfTimerApp> {
                   const SizedBox(width: 10),
                   ElevatedButton(onPressed: _resetTimer, child: const Text('Reset')),
                 ],
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _textController,
+                decoration: const InputDecoration(hintText: 'Enter Speed x ?'),
               ),
             ],
           ),
