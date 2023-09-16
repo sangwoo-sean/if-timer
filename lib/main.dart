@@ -18,8 +18,8 @@ class _TimerAppState extends State<IfTimerApp> {
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = [
-    const CreateTimer(),
     const TimerList(),
+    const CreateTimer(),
   ];
 
   void _onItemTapped(int index) {

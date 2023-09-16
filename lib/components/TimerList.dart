@@ -13,83 +13,25 @@ class TimerList extends StatefulWidget {
 }
 
 class _TimerListState extends State<TimerList> {
-  int _timePassed = 0;
-  Timer? _ifTimer;
-  bool _isRunning = false;
-  DateTime startTime = DateTime.now();
-  var speed = 1;
-  final TextEditingController _textController = TextEditingController();
-
-  void _startTimer() {
-    if (!_isRunning && _textController.text.isNotEmpty) {
-      setState(() {
-        _isRunning = true;
-        startTime = DateTime.now();
-        speed = int.parse(_textController.text);
-      });
-      _ifTimer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
-        setState(() {
-          _timePassed = _timePassed + speed;
-        });
-      });
-    }
-  }
-
-  void _pauseTimer() {
-    if (_ifTimer != null && _isRunning) {
-      _ifTimer!.cancel();
-      setState(() {
-        _isRunning = false;
-      });
-    }
-  }
-
-  void _resetTimer() {
-    if (_ifTimer != null) {
-      _ifTimer!.cancel();
-      setState(() {
-        _isRunning = false;
-        _timePassed = 0;
-        startTime = DateTime.now();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _ifTimer?.cancel();
-    super.dispose();
-  }
+  final List<String> items = List<String>.generate(10, (index) => "Item $index");
 
   @override
   Widget build(BuildContext context) {
-    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(
-        startTime.millisecondsSinceEpoch + _timePassed);
-    String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(formattedIfNow, style: const TextStyle(fontSize: 24)),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                onPressed: _startTimer, child: const Text('Start2')),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                onPressed: _pauseTimer, child: const Text('Pause')),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                onPressed: _resetTimer, child: const Text('Reset')),
-          ],
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: _textController,
-        )
-      ],
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(items[index]),
+          onTap: () {
+            // Action when tapping on an item
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('You tapped on ${items[index]}'),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
