@@ -5,8 +5,9 @@
 - [x] get time speed input
 - [x] start the time with input speed
 - [x] display input created time
-- [ ] get title of the timer
-- [ ] make list of timer
+- [x] show item to the list
+- [ ] save data to app
+- [ ] read saved data from app
 - [ ] add item to the list
 - [ ] delete item from the list
 - [ ] update title of item
