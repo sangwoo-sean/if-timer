@@ -1,7 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import 'components/CreateTimer.dart';
+import 'components/TimerList.dart';
 
 void main() {
   runApp(const IfTimerApp());
@@ -15,138 +15,43 @@ class IfTimerApp extends StatefulWidget {
 }
 
 class _TimerAppState extends State<IfTimerApp> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _widgetOptions = [
+    const CreateTimer(),
+    const TimerList(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "If Timer Title",
       home: Scaffold(
         appBar: AppBar(title: const Text('IF Timer')),
-        body: const Center(
-          child: CreateTimer(),
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
         ),
-      ),
-    );
-  }
-}
-
-class CreateTimer extends StatefulWidget {
-  const CreateTimer({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _CreateTimerState();
-}
-
-class _CreateTimerState extends State<CreateTimer> {
-  int _timePassed = 0;
-  Timer? _ifTimer;
-  bool _isRunning = false;
-  DateTime startTime = DateTime.now();
-  var speed = 1;
-  final TextEditingController _textController = TextEditingController();
-
-  void _startTimer() {
-    if (!_isRunning && _textController.text.isNotEmpty) {
-      setState(() {
-        _isRunning = true;
-        startTime = DateTime.now();
-        speed = int.parse(_textController.text);
-      });
-      _ifTimer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
-        setState(() {
-          _timePassed = _timePassed + speed;
-        });
-      });
-    }
-  }
-
-  void _pauseTimer() {
-    if (_ifTimer != null && _isRunning) {
-      _ifTimer!.cancel();
-      setState(() {
-        _isRunning = false;
-      });
-    }
-  }
-
-  void _resetTimer() {
-    if (_ifTimer != null) {
-      _ifTimer!.cancel();
-      setState(() {
-        _isRunning = false;
-        _timePassed = 0;
-        startTime = DateTime.now();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _ifTimer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(
-        startTime.millisecondsSinceEpoch + _timePassed);
-    String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(formattedIfNow, style: const TextStyle(fontSize: 24)),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                onPressed: _startTimer, child: const Text('Start')),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                onPressed: _pauseTimer, child: const Text('Pause')),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                onPressed: _resetTimer, child: const Text('Reset')),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'List',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add_circle_outline),
+              label: 'Create',
+            ),
           ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: _onItemTapped,
         ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: _textController,
-        )
-      ],
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  final TextEditingController controller;
-
-  const CustomTextField({required this.controller, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: '속도',
-          labelStyle: MaterialStateTextStyle.resolveWith(
-            (Set<MaterialState> states) {
-              final Color color = states.contains(MaterialState.error)
-                  ? Theme.of(context).colorScheme.error
-                  : Colors.blue;
-              return TextStyle(color: color, letterSpacing: 1.3);
-            },
-          ),
-        ),
-        validator: (String? value) {
-          if (value == null || value.isEmpty) {
-            return '시간의 속도를 입력하세요';
-          }
-          return null;
-        },
-        autovalidateMode: AutovalidateMode.always,
       ),
     );
   }
