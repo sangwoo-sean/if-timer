@@ -69,7 +69,6 @@ class _TimerAppState extends State<IfTimerApp> {
         startTime.millisecondsSinceEpoch + _timePassed);
     String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
 
-    // var time = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text('IF Timer')),
@@ -93,34 +92,47 @@ class _TimerAppState extends State<IfTimerApp> {
                 ],
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                width: 200,
-                child: TextFormField(
-                  controller: _textController,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: '속도',
-                    labelStyle: MaterialStateTextStyle.resolveWith(
-                          (Set<MaterialState> states) {
-                        final Color color = states.contains(MaterialState.error)
-                            ? Theme.of(context).colorScheme.error
-                            : Colors.blue;
-                        return TextStyle(color: color, letterSpacing: 1.3);
-                      },
-                    ),
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value == '') {
-                      return '시간의 속도를 입력하세요';
-                    }
-                    return null;
-                  },
-                  autovalidateMode: AutovalidateMode.always,
-                )
-              ),
+              CustomTextField(
+                controller: _textController,
+              )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CustomTextField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const CustomTextField({required this.controller, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 200,
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: '속도',
+          labelStyle: MaterialStateTextStyle.resolveWith(
+            (Set<MaterialState> states) {
+              final Color color = states.contains(MaterialState.error)
+                  ? Theme.of(context).colorScheme.error
+                  : Colors.blue;
+              return TextStyle(color: color, letterSpacing: 1.3);
+            },
+          ),
+        ),
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return '시간의 속도를 입력하세요';
+          }
+          return null;
+        },
+        autovalidateMode: AutovalidateMode.always,
       ),
     );
   }
