@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-import 'CustomTextField.dart';
+import 'Item.dart';
 
 class TimerList extends StatefulWidget {
   const TimerList({super.key});
@@ -13,23 +10,25 @@ class TimerList extends StatefulWidget {
 }
 
 class _TimerListState extends State<TimerList> {
-  final List<String> items = List<String>.generate(10, (index) => "Item $index");
+  final List<Item> items = List<Item>.generate(
+          3, (index) => Item("Title $index", DateTime(2023, 9, 16), index + 1))
+      .toList();
+  final DateTime now = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(items[index]),
-          onTap: () {
-            // Action when tapping on an item
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('You tapped on ${items[index]}'),
-              ),
-            );
-          },
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+                border: index == items.length - 1
+                    ? null
+                    : const Border(bottom: BorderSide(color: Colors.grey))),
+            child: items[index],
+          ),
         );
       },
     );
