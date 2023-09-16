@@ -29,9 +29,9 @@ class _TimerAppState extends State<IfTimerApp> {
         startTime = DateTime.now();
         speed = int.parse(_textController.text);
       });
-      _ifTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+      _ifTimer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
         setState(() {
-          _timePassed = _timePassed + speed * 1000;
+          _timePassed = _timePassed + speed;
         });
       });
     }
@@ -65,7 +65,8 @@ class _TimerAppState extends State<IfTimerApp> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(startTime.millisecondsSinceEpoch + _timePassed);
+    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(
+        startTime.millisecondsSinceEpoch + _timePassed);
     String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
 
     // var time = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
@@ -76,22 +77,46 @@ class _TimerAppState extends State<IfTimerApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(formattedIfNow, style: const TextStyle(fontSize: 36)),
+              Text(formattedIfNow, style: const TextStyle(fontSize: 24)),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(onPressed: _startTimer, child: const Text('Start')),
+                  ElevatedButton(
+                      onPressed: _startTimer, child: const Text('Start')),
                   const SizedBox(width: 10),
-                  ElevatedButton(onPressed: _pauseTimer, child: const Text('Pause')),
+                  ElevatedButton(
+                      onPressed: _pauseTimer, child: const Text('Pause')),
                   const SizedBox(width: 10),
-                  ElevatedButton(onPressed: _resetTimer, child: const Text('Reset')),
+                  ElevatedButton(
+                      onPressed: _resetTimer, child: const Text('Reset')),
                 ],
               ),
               const SizedBox(height: 20),
-              TextField(
-                controller: _textController,
-                decoration: const InputDecoration(hintText: 'Enter Speed x ?'),
+              SizedBox(
+                width: 200,
+                child: TextFormField(
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: '속도',
+                    labelStyle: MaterialStateTextStyle.resolveWith(
+                          (Set<MaterialState> states) {
+                        final Color color = states.contains(MaterialState.error)
+                            ? Theme.of(context).colorScheme.error
+                            : Colors.blue;
+                        return TextStyle(color: color, letterSpacing: 1.3);
+                      },
+                    ),
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value == '') {
+                      return '시간의 속도를 입력하세요';
+                    }
+                    return null;
+                  },
+                  autovalidateMode: AutovalidateMode.always,
+                )
               ),
             ],
           ),

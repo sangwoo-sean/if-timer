@@ -2,14 +2,14 @@
 
 ## To Do
 
-- [] get time speed input
-- [] start the time with input speed
-- [] display input created time
-- [] get title of the timer
-- [] make list of timer
-- [] add item to the list
-- [] delete item from the list
-- [] update title of item
+- [x] get time speed input
+- [x] start the time with input speed
+- [x] display input created time
+- [ ] get title of the timer
+- [ ] make list of timer
+- [ ] add item to the list
+- [ ] delete item from the list
+- [ ] update title of item
 
 
 ## Consider
