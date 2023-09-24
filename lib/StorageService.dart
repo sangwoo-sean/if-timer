@@ -50,7 +50,7 @@ class HiveStorageService implements StorageService {
   @override
   Future<void> saveTimers(Item item) async {
     List<Item> items = await findTimers();
-    items.add(item);
+    items.insert(0, item);
     await save("timers", jsonEncode(items));
   }
 }

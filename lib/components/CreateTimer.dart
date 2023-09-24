@@ -17,7 +17,7 @@ class _CreateTimerState extends State<CreateTimer> {
 
   void _addTimer() async {
     if (_speedController.text.isNotEmpty) {
-      Item item = Item(_speedController.text, DateTime.now(),
+      Item item = Item(_titleController.text, DateTime.now(),
           int.parse(_speedController.text));
       await HiveStorageService().saveTimers(item);
       _titleController.text = "";
