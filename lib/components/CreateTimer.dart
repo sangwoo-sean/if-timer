@@ -16,7 +16,7 @@ class _CreateTimerState extends State<CreateTimer> {
   final TextEditingController _speedController = TextEditingController();
 
   void _addTimer() async {
-    if (_speedController.text.isNotEmpty) {
+    if (_speedController.text.isNotEmpty && _titleController.text.isNotEmpty) {
       Item item = Item(_titleController.text, DateTime.now(),
           int.parse(_speedController.text));
       await HiveStorageService().saveTimers(item);
