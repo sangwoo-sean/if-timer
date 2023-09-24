@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:if_timer/StorageService.dart';
 
 import 'components/CreateTimer.dart';
 import 'components/TimerList.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await HiveStorageService().init();
+
   runApp(const IfTimerApp());
 }
 
@@ -16,13 +21,12 @@ class IfTimerApp extends StatefulWidget {
 
 class _TimerAppState extends State<IfTimerApp> {
   int _selectedIndex = 0;
-
   final List<Widget> _widgetOptions = [
     const TimerList(),
     const CreateTimer(),
   ];
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
