@@ -9,6 +9,10 @@
 - [x] save data to app
 - [x] read saved data from app
 - [x] add item to the list
+- [ ] get title as input
+- [ ] save title with item
+- [ ] make toast on save
+- [ ] make menu for list item
 - [ ] delete item from the list
 - [ ] update title of item
 

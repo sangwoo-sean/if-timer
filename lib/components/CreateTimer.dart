@@ -1,10 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:if_timer/StorageService.dart';
 import 'package:if_timer/components/Item.dart';
-import 'package:intl/intl.dart';
 
 import 'CustomTextField.dart';
 
@@ -16,53 +12,43 @@ class CreateTimer extends StatefulWidget {
 }
 
 class _CreateTimerState extends State<CreateTimer> {
-  int _timePassed = 0;
-  Timer? _ifTimer;
-  DateTime startTime = DateTime.now();
-  var speed = 1;
-  final TextEditingController _textController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _speedController = TextEditingController();
 
   void _addTimer() async {
-    if (_textController.text.isNotEmpty) {
-      var timersJson = await HiveStorageService().find("timers");
-      if (timersJson != null) {
-        List<dynamic> timers = jsonDecode(timersJson);
-        List<Item> items = timers.map((i) => Item.fromJson(i)).toList();
-        items.add(Item("title", DateTime.now(), int.parse(_textController.text)));
-        await HiveStorageService().save("timers", jsonEncode(items));
-        _textController.text = "a";
-      }
+    if (_speedController.text.isNotEmpty) {
+      Item item = Item(_speedController.text, DateTime.now(),
+          int.parse(_speedController.text));
+      await HiveStorageService().saveTimers(item);
+      _titleController.text = "";
+      _speedController.text = "";
     }
   }
 
   @override
-  void dispose() {
-    _ifTimer?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(
-        startTime.millisecondsSinceEpoch + _timePassed);
-    String formattedIfNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(formattedIfNow, style: const TextStyle(fontSize: 24)),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: _titleController,
+          label: "타이머 이름",
+          invalidText: '타이머 이름을 입력하세요',
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          controller: _speedController,
+          label: "속도",
+          invalidText: '시간의 속도를 입력하세요',
+        ),
         const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-                onPressed: _addTimer, child: const Text('추가')),
+            ElevatedButton(onPressed: _addTimer, child: const Text('추가')),
           ],
         ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: _textController,
-        )
       ],
     );
   }

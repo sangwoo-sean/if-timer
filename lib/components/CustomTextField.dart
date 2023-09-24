@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
+  final String label;
+  final String invalidText;
 
-  const CustomTextField({required this.controller, Key? key}) : super(key: key);
+  const CustomTextField({required this.controller, required this.label, required this.invalidText, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class CustomTextField extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
-          labelText: '속도',
+          labelText: label,
           labelStyle: MaterialStateTextStyle.resolveWith(
                 (Set<MaterialState> states) {
               final Color color = states.contains(MaterialState.error)
@@ -25,7 +27,7 @@ class CustomTextField extends StatelessWidget {
         ),
         validator: (String? value) {
           if (value == null || value.isEmpty) {
-            return '시간의 속도를 입력하세요';
+            return invalidText;
           }
           return null;
         },

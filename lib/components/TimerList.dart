@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:if_timer/StorageService.dart';
 
@@ -20,15 +18,13 @@ class _TimerListState extends State<TimerList> {
   @override
   void initState() {
     super.initState();
-    debugPrint("load...");
     loadData();
   }
 
   void loadData() async {
-    var timersJson = await HiveStorageService().find("timers");
-    List<dynamic> timers = jsonDecode(timersJson!);
+    List<Item> timers = await HiveStorageService().findTimers();
     setState(() {
-      items = timers.map((i) => Item.fromJson(i)).toList();
+      items = timers;
       isLoading = false;
     });
   }
