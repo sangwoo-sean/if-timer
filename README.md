@@ -6,9 +6,9 @@
 - [x] start the time with input speed
 - [x] display input created time
 - [x] show item to the list
-- [ ] save data to app
-- [ ] read saved data from app
-- [ ] add item to the list
+- [x] save data to app
+- [x] read saved data from app
+- [x] add item to the list
 - [ ] delete item from the list
 - [ ] update title of item
 

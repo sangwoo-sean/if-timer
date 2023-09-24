@@ -26,7 +26,7 @@ class _TimerAppState extends State<IfTimerApp> {
     const CreateTimer(),
   ];
 
-  void _onItemTapped(int index) async {
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });

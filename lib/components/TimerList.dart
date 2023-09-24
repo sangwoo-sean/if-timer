@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:if_timer/StorageService.dart';
 
 import 'Item.dart';
 
@@ -10,13 +13,33 @@ class TimerList extends StatefulWidget {
 }
 
 class _TimerListState extends State<TimerList> {
-  final List<Item> items = List<Item>.generate(
-          3, (index) => Item("Title $index", DateTime(2023, 9, 16), index + 1))
-      .toList();
+  List<Item> items = List<Item>.empty();
   final DateTime now = DateTime.now();
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint("load...");
+    loadData();
+  }
+
+  void loadData() async {
+    var timersJson = await HiveStorageService().find("timers");
+    List<dynamic> timers = jsonDecode(timersJson!);
+    setState(() {
+      items = timers.map((i) => Item.fromJson(i)).toList();
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {

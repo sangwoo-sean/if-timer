@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:if_timer/StorageService.dart';
+import 'package:if_timer/components/Item.dart';
 import 'package:intl/intl.dart';
 
 import 'CustomTextField.dart';
@@ -15,43 +18,20 @@ class CreateTimer extends StatefulWidget {
 class _CreateTimerState extends State<CreateTimer> {
   int _timePassed = 0;
   Timer? _ifTimer;
-  bool _isRunning = false;
   DateTime startTime = DateTime.now();
   var speed = 1;
   final TextEditingController _textController = TextEditingController();
 
-  void _startTimer() {
-    if (!_isRunning && _textController.text.isNotEmpty) {
-      setState(() {
-        _isRunning = true;
-        startTime = DateTime.now();
-        speed = int.parse(_textController.text);
-      });
-      _ifTimer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
-        setState(() {
-          _timePassed = _timePassed + speed;
-        });
-      });
-    }
-  }
-
-  void _pauseTimer() {
-    if (_ifTimer != null && _isRunning) {
-      _ifTimer!.cancel();
-      setState(() {
-        _isRunning = false;
-      });
-    }
-  }
-
-  void _resetTimer() {
-    if (_ifTimer != null) {
-      _ifTimer!.cancel();
-      setState(() {
-        _isRunning = false;
-        _timePassed = 0;
-        startTime = DateTime.now();
-      });
+  void _addTimer() async {
+    if (_textController.text.isNotEmpty) {
+      var timersJson = await HiveStorageService().find("timers");
+      if (timersJson != null) {
+        List<dynamic> timers = jsonDecode(timersJson);
+        List<Item> items = timers.map((i) => Item.fromJson(i)).toList();
+        items.add(Item("title", DateTime.now(), int.parse(_textController.text)));
+        await HiveStorageService().save("timers", jsonEncode(items));
+        _textController.text = "a";
+      }
     }
   }
 
@@ -76,13 +56,7 @@ class _CreateTimerState extends State<CreateTimer> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-                onPressed: _startTimer, child: const Text('Start')),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                onPressed: _pauseTimer, child: const Text('Pause')),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                onPressed: _resetTimer, child: const Text('Reset')),
+                onPressed: _addTimer, child: const Text('추가')),
           ],
         ),
         const SizedBox(height: 20),

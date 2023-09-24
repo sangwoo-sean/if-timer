@@ -25,6 +25,10 @@ class HiveStorageService implements StorageService {
   @override
   Future<String?> find(String key) async {
     var box = await Hive.openBox("myBox");
+    if (box.get("timers") == null) {
+      box.put("timers", "[]");
+    }
+
     return box.get(key);
   }
 }

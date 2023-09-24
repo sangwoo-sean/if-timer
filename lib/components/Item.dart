@@ -9,6 +9,18 @@ class Item extends StatefulWidget {
 
   Item(this.title, this.startedTime, this.speed);
 
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'startedTime': startedTime.toIso8601String(),
+    'speed': speed,
+  };
+
+  static Item fromJson(Map<String, dynamic> json) => Item(
+    json['title'],
+    DateTime.parse(json['startedTime']),
+    json['speed'],
+  );
+
   @override
   State<StatefulWidget> createState() => _ItemState();
 }
