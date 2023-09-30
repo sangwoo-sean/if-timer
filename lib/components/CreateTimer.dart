@@ -33,27 +33,29 @@ class _CreateTimerState extends State<CreateTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: _titleController,
-          label: "타이머 이름",
-          invalidText: '타이머 이름을 입력하세요',
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: _speedController,
-          label: "속도",
-          invalidText: '시간의 속도를 입력하세요',
-        ),
-        const SizedBox(height: 20),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          ElevatedButton(
-              onPressed: () => _addTimer(context), child: const Text('추가')),
-        ]),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const SizedBox(height: 20),
+          CustomTextField(
+            controller: _titleController,
+            label: "타이머 이름",
+            invalidText: '타이머 이름을 입력하세요',
+          ),
+          const SizedBox(height: 20),
+          CustomTextField(
+            controller: _speedController,
+            label: "속도",
+            invalidText: '시간의 속도를 입력하세요',
+          ),
+          const SizedBox(height: 20),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            ElevatedButton(
+                onPressed: () => _addTimer(context), child: const Text('추가')),
+          ]),
+        ],
+      ),
     );
   }
 }
