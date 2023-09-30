@@ -39,15 +39,12 @@ class _TimerListState extends State<TimerList> {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-                border: index == items.length - 1
-                    ? null
-                    : const Border(bottom: BorderSide(color: Colors.grey))),
-            child: items[index],
-          ),
+        return Container(
+          decoration: BoxDecoration(
+              border: index == items.length - 1
+                  ? null
+                  : const Border(bottom: BorderSide(color: Colors.grey))),
+          child: items[index],
         );
       },
     );

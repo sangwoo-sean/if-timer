@@ -51,27 +51,33 @@ class _ItemState extends State<Item> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ListTile(
-          title: Text(widget.title),
-          subtitle: (BuildContext context) {
-            int milliPassed = now.millisecondsSinceEpoch - widget.startedTime.millisecondsSinceEpoch;
-            int ifTimePassed = milliPassed * widget.speed;
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            title: Text(widget.title),
+            subtitle: (BuildContext context) {
+              int milliPassed = now.millisecondsSinceEpoch - widget.startedTime.millisecondsSinceEpoch;
+              int ifTimePassed = milliPassed * widget.speed;
 
-            DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(
-                widget.startedTime.millisecondsSinceEpoch + ifTimePassed);
+              DateTime ifNow = DateTime.fromMillisecondsSinceEpoch(
+                  widget.startedTime.millisecondsSinceEpoch + ifTimePassed);
 
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow),
-                style: const TextStyle(fontSize: 30, color: Colors.black),
-              ),
-            );
-          }(context),
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  DateFormat('yyyy-MM-dd hh:mm:ss').format(ifNow),
+                  style: const TextStyle(fontSize: 30, color: Colors.black),
+                ),
+              );
+            }(context),
+            onTap: () {
+              debugPrint('tap');
+            },
+          ),
         ),
         Positioned(
-          top: 0,
-          right: 0,
+          top: 8,
+          right: 8,
           child: Text("x${widget.speed}"),
         )
       ],
