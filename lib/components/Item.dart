@@ -71,7 +71,32 @@ class _ItemState extends State<Item> {
               );
             }(context),
             onTap: () {
-              debugPrint('tap');
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.edit),
+                          title: const Text('Edit'),
+                          onTap: () {
+                            Navigator.pop(context); // Close the modal
+                            // Add your edit logic here
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.delete),
+                          title: const Text('Delete'),
+                          onTap: () {
+                            Navigator.pop(context); // Close the modal
+                            // Add your delete logic here
+                          },
+                        ),
+                      ],
+                    );
+                  }
+              );
             },
           ),
         ),
