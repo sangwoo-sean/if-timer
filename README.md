@@ -12,6 +12,6 @@
 - [x] get title as input
 - [x] save title with item
 - [x] make toast on save
-- [ ] make menu for list item
-- [ ] delete item from the list
+- [x] make menu for list item
+- [x] delete item from the list
 - [ ] update title of item
