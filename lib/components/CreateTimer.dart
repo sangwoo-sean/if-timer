@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:if_timer/StorageService.dart';
 import 'package:if_timer/components/Item.dart';
+import 'package:uuid/uuid.dart';
 import 'CustomTextField.dart';
 
 class CreateTimer extends StatefulWidget {
@@ -16,8 +17,12 @@ class _CreateTimerState extends State<CreateTimer> {
 
   void _addTimer(BuildContext context) async {
     if (_speedController.text.isNotEmpty && _titleController.text.isNotEmpty) {
-      Item item = Item(_titleController.text, DateTime.now(),
-          int.parse(_speedController.text));
+      Item item = Item(
+          const Uuid().v4(),
+          _titleController.text,
+          DateTime.now(),
+          int.parse(_speedController.text),
+          () => {});
       await HiveStorageService().saveTimers(item);
       _titleController.text = "";
       _speedController.text = "";

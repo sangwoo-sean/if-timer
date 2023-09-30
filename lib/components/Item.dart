@@ -3,22 +3,27 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 class Item extends StatefulWidget {
+  final String id;
   final String title;
   final DateTime startedTime;
   final int speed;
+  final Function onDelete;
 
-  Item(this.title, this.startedTime, this.speed);
+  Item(this.id, this.title, this.startedTime, this.speed, this.onDelete);
 
   Map<String, dynamic> toJson() => {
+    'id': id,
     'title': title,
     'startedTime': startedTime.toIso8601String(),
     'speed': speed,
   };
 
   static Item fromJson(Map<String, dynamic> json) => Item(
+    json['id'],
     json['title'],
     DateTime.parse(json['startedTime']),
     json['speed'],
+    () => {}
   );
 
   @override
@@ -90,7 +95,10 @@ class _ItemState extends State<Item> {
                           title: const Text('Delete'),
                           onTap: () {
                             Navigator.pop(context); // Close the modal
-                            // Add your delete logic here
+                            widget.onDelete();
+                            // setState(() {
+                            //   items.removeAt(index); // Remove the item from the list
+                            // });
                           },
                         ),
                       ],

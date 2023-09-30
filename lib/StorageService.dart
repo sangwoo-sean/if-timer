@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
@@ -11,6 +10,8 @@ abstract class StorageService {
   Future<String?> find(String key);
   Future<void> saveTimers(Item item);
   Future<List<Item>> findTimers();
+  Future<Item> findTimer(String id);
+  Future<void> deleteTimer(String id);
 }
 
 class HiveStorageService implements StorageService {
@@ -48,9 +49,22 @@ class HiveStorageService implements StorageService {
   }
 
   @override
+  Future<Item> findTimer(String id) async {
+    var timers = await findTimers();
+    return timers.firstWhere((i) => i.title == id);
+  }
+
+  @override
   Future<void> saveTimers(Item item) async {
     List<Item> items = await findTimers();
     items.insert(0, item);
     await save("timers", jsonEncode(items));
+  }
+
+  @override
+  Future<void> deleteTimer(String id) async {
+    var timers = await findTimers();
+    timers.removeWhere((i) => i.id == id);
+    await save("timers", jsonEncode(timers));
   }
 }

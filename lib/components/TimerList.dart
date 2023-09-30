@@ -24,9 +24,22 @@ class _TimerListState extends State<TimerList> {
   void loadData() async {
     List<Item> timers = await HiveStorageService().findTimers();
     setState(() {
-      items = timers;
+      items = timers.map((i) => Item(
+        i.id,
+        i.title,
+        i.startedTime,
+        i.speed,
+        () => handleDeleteItem(i.id),
+      )).toList();
       isLoading = false;
     });
+  }
+
+  void handleDeleteItem(String id) async {
+    setState(() {
+      items.removeWhere((item) => item.id == id);
+    });
+    await HiveStorageService().deleteTimer(id);
   }
 
   @override
