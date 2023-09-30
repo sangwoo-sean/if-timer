@@ -52,7 +52,10 @@ class _CreateTimerState extends State<CreateTimer> {
           const SizedBox(height: 20),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             ElevatedButton(
-                onPressed: () => _addTimer(context), child: const Text('추가')),
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  _addTimer(context);
+                }, child: const Text('추가')),
           ]),
         ],
       ),
