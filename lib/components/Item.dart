@@ -64,21 +64,21 @@ class _ItemState extends State<Item> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Text'),
+          title: const Text('제목 수정'),
           content: TextField(
             controller: _textEditingController,
-            decoration: InputDecoration(hintText: 'Enter your text'),
+            decoration: const InputDecoration(hintText: '제목을 입력하세요'),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Save'),
+              child: const Text('저장'),
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
                 widget.onUpdate(_textEditingController.text);
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('취소'),
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
               },
@@ -122,7 +122,7 @@ class _ItemState extends State<Item> {
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.edit),
-                          title: const Text('Edit'),
+                          title: const Text('수정'),
                           onTap: () {
                             Navigator.pop(context); // Close the modal
                             _showEditDialog(context, widget.title); // Show the edit dialog
@@ -131,7 +131,7 @@ class _ItemState extends State<Item> {
                         ),
                         ListTile(
                           leading: const Icon(Icons.delete),
-                          title: const Text('Delete'),
+                          title: const Text('삭제'),
                           onTap: () {
                             Navigator.pop(context); // Close the modal
                             widget.onDelete();
