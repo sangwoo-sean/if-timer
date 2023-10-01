@@ -148,6 +148,11 @@ class _ItemState extends State<Item> {
           top: 8,
           right: 8,
           child: Text("x${widget.speed}"),
+        ),
+        Positioned(
+          bottom: 8,
+          left: 32,
+          child: Text("${DateFormat('yyyy-MM-dd').format(widget.startedTime)} 에 시작"),
         )
       ],
     );
