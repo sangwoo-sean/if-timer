@@ -8,7 +8,7 @@ abstract class StorageService {
   Future<void> init();
   Future<void> save(String key, String value);
   Future<String?> find(String key);
-  Future<void> saveTimers(Item item);
+  Future<void> saveTimer(Item item);
   Future<List<Item>> findTimers();
   Future<Item> findTimer(String id);
   Future<void> deleteTimer(String id);
@@ -55,10 +55,22 @@ class HiveStorageService implements StorageService {
   }
 
   @override
-  Future<void> saveTimers(Item item) async {
+  Future<void> saveTimer(Item item) async {
     List<Item> items = await findTimers();
     items.insert(0, item);
     await save("timers", jsonEncode(items));
+  }
+
+  @override
+  Future<void> updateTimer(String id, String title) async {
+    var timers = await findTimers();
+    List<Item> newTimers = timers.map((i) {
+      if (i.id == id) {
+        return Item(i.id, title, i.startedTime, i.speed, () => {}, () => {});
+      }
+      return i;
+    }).toList();
+    await save("timers", jsonEncode(newTimers));
   }
 
   @override

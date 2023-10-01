@@ -17,13 +17,9 @@ class _CreateTimerState extends State<CreateTimer> {
 
   void _addTimer(BuildContext context) async {
     if (_speedController.text.isNotEmpty && _titleController.text.isNotEmpty) {
-      Item item = Item(
-          const Uuid().v4(),
-          _titleController.text,
-          DateTime.now(),
-          int.parse(_speedController.text),
-          () => {});
-      await HiveStorageService().saveTimers(item);
+      Item item = Item(const Uuid().v4(), _titleController.text, DateTime.now(),
+          int.parse(_speedController.text), () => {}, () => {});
+      await HiveStorageService().saveTimer(item);
       _titleController.text = "";
       _speedController.text = "";
 
@@ -60,7 +56,8 @@ class _CreateTimerState extends State<CreateTimer> {
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   _addTimer(context);
-                }, child: const Text('추가')),
+                },
+                child: const Text('추가')),
           ]),
         ],
       ),

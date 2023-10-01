@@ -14,4 +14,5 @@
 - [x] make toast on save
 - [x] make menu for list item
 - [x] delete item from the list
-- [ ] update title of item
+- [x] update title of item
+- [ ] deploy?

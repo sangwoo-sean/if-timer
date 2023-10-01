@@ -8,8 +8,9 @@ class Item extends StatefulWidget {
   final DateTime startedTime;
   final int speed;
   final Function onDelete;
+  final Function onUpdate;
 
-  Item(this.id, this.title, this.startedTime, this.speed, this.onDelete);
+  Item(this.id, this.title, this.startedTime, this.speed, this.onDelete, this.onUpdate);
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -23,7 +24,8 @@ class Item extends StatefulWidget {
     json['title'],
     DateTime.parse(json['startedTime']),
     json['speed'],
-    () => {}
+    () => {},
+    () => {},
   );
 
   @override
@@ -33,6 +35,9 @@ class Item extends StatefulWidget {
 class _ItemState extends State<Item> {
   late DateTime now;
   Timer? _timer;
+
+  final TextEditingController _textEditingController = TextEditingController();
+
 
   @override
   void initState() {
@@ -51,6 +56,39 @@ class _ItemState extends State<Item> {
     _timer?.cancel();
     super.dispose();
   }
+
+  void _showEditDialog(BuildContext context, String title) {
+    _textEditingController.text = title;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit Text'),
+          content: TextField(
+            controller: _textEditingController,
+            decoration: InputDecoration(hintText: 'Enter your text'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                widget.onUpdate(_textEditingController.text);
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +125,7 @@ class _ItemState extends State<Item> {
                           title: const Text('Edit'),
                           onTap: () {
                             Navigator.pop(context); // Close the modal
+                            _showEditDialog(context, widget.title); // Show the edit dialog
                             // Add your edit logic here
                           },
                         ),
@@ -96,9 +135,6 @@ class _ItemState extends State<Item> {
                           onTap: () {
                             Navigator.pop(context); // Close the modal
                             widget.onDelete();
-                            // setState(() {
-                            //   items.removeAt(index); // Remove the item from the list
-                            // });
                           },
                         ),
                       ],
