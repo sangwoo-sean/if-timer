@@ -15,10 +15,37 @@ class _CreateTimerState extends State<CreateTimer> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _speedController = TextEditingController();
 
+  void alertMaxNum() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('알림'),
+          content: const Text('속도는 최대 9,999,999 까지 가능합니다.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _addTimer(BuildContext context) async {
     if (_speedController.text.isNotEmpty && _titleController.text.isNotEmpty) {
+      var speedInNumber = int.parse(_speedController.text);
+      if (speedInNumber >= 10000000) {
+        _speedController.text = "9999999";
+        alertMaxNum();
+        return;
+      }
+
       Item item = Item(const Uuid().v4(), _titleController.text, DateTime.now(),
-          int.parse(_speedController.text), () => {}, () => {});
+          speedInNumber, () => {}, () => {});
       await HiveStorageService().saveTimer(item);
       _titleController.text = "";
       _speedController.text = "";
